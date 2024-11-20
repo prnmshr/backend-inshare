@@ -4,28 +4,24 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateNotificationsTable extends Migration
 {
     public function up()
     {
         Schema::create('notifications', function (Blueprint $table) {
-            $table->uuid('notification_id')->primary();
-            $table->uuid('user_id'); // Foreign key ke users
-            $table->string('type'); // Tipe notifikasi (liked, commented, follow, etc)
-            $table->text('message')->nullable(); // Pesan tambahan (jika ada)
-            $table->string('media_url')->nullable(); // URL media yang terkait
-            $table->boolean('is_new')->default(true); // Status baru/belum dilihat
-            $table->timestamp('created_at')->useCurrent();
-            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
+            $table->increments('id'); // Kolom id sebagai auto increment
+            $table->unsignedInteger('user_id'); // Kolom user_id sebagai foreign key
+            $table->string('message'); // Pesan notifikasi
+            $table->enum('status', ['unread', 'read'])->default('unread'); // Status notifikasi
+            $table->timestamps();
+            
+            // Menambahkan foreign key untuk relasi ke tabel users
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('notifications');
     }
-};
+}

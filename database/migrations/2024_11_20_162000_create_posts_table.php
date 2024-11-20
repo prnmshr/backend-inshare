@@ -4,27 +4,22 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreatePostsTable extends Migration
 {
     public function up()
     {
         Schema::create('posts', function (Blueprint $table) {
-            $table->uuid('post_id')->primary();
-            $table->uuid('user_id'); // Foreign key ke users
-            $table->text('caption')->nullable();
-            $table->string('media_url')->nullable();
-            $table->string('tag')->nullable();
-            $table->timestamp('created_at')->useCurrent();
-            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
+            $table->increments('id'); // Menandakan kolom id sebagai auto increment
+            $table->string('caption');
+            $table->string('media_url');
+            $table->unsignedInteger('user_id'); // Kolom user_id sebagai foreign key
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); // Menambahkan foreign key
+            $table->timestamps();
         });
     }
 
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('posts');
     }
-};
+}
