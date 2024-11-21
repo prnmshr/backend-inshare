@@ -1,9 +1,12 @@
+<?php
+
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\StoryController;
 use App\Http\Controllers\NotificationController;
+use Illuminate\Support\Facades\Route;
 
 // Routes untuk Users
 Route::get('/users', [UserController::class, 'index']);
